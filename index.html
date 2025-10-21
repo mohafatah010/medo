@@ -1,945 +1,175 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليلك للكتب والإحصاء</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
-        body { background-color: #f3f4f6; }
-        body[lang="ar"] { font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; }
-        body[lang="en"] { font-family: 'Inter', sans-serif; direction: ltr; text-align: left; }
-
-        .container { max-width: 900px; }
-        .book-card { display: flex; flex-direction: column; align-items: center; }
-        @media (min-width: 640px) {
-            .book-card { flex-direction: row; align-items: flex-start; }
-            body[lang="ar"] .book-card { flex-direction: row-reverse; }
-        }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
-        .modal-content { background-color: #fff; padding: 2rem; border-radius: 0.75rem; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; }
-        .chat-message { max-width: 80%; padding: 8px 12px; border-radius: 18px; margin-bottom: 8px; }
-        .chat-user-message { background-color: #e2e8f0; margin-left: auto; }
-        .chat-bot-message { background-color: #d1fae5; margin-right: auto; }
-        .genre-tag { padding: 4px 12px; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; color: #4f46e5; background-color: #e0e7ff; margin: 4px; display: inline-block; }
-        #socialStatsSection .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-        #socialStatsSection h3 { font-size: 1rem; }
-        #socialStatsSection img#qrCodeImage { width: 60px; height: 60px; }
-        .tab-button.active { background-color: #4f46e5; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); }
-        .tab-button:not(.active) { background-color: #f3f4f6; color: #4b5563; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enppi Bibliotheca</title>
+  <meta name="description" content="Unlock a world of knowledge with Enppi Bibliotheca – scientific and cultural books, audio library, events and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --brand:#0ea5b7; --brand-700:#0f766e; }
+    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    .glass { backdrop-filter: blur(6px); background: rgba(255,255,255,0.08); }
+    .shadow-soft { box-shadow: 0 24px 60px -30px rgba(2,6,23,.45); }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="container bg-white p-8 rounded-2xl shadow-xl w-full">
-        <div class="flex justify-start mb-4">
-            <button id="langToggleBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-300"></button>
-        </div>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Navbar -->
+  <header class="fixed inset-x-0 top-0 z-50 bg-transparent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="flex items-center gap-2 font-extrabold text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]">
+          <span class="inline-block h-6 w-6 rounded bg-white/90 text-[var(--brand-700)] grid place-items-center font-black">E</span>
+          <span>Enppi Bibliotheca</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-white/90">
+          <a href="#about" class="hover:text-white">About</a>
+          <a href="#services" class="hover:text-white">Services</a>
+          <a href="#stats" class="hover:text-white">Stats</a>
+          <a href="book-app.html" class="px-4 py-2 rounded-lg bg-white/90 text-[var(--brand-700)] font-semibold hover:bg-white">Open Library App</a>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-        <h1 id="mainTitle" class="text-3xl font-bold text-center text-gray-800 mb-6"></h1>
-        <p id="subtitle" class="text-center text-gray-600 mb-8"></p>
+  <!-- Hero -->
+  <section class="relative min-h-[80vh] grid place-items-center overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-[url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1640&auto=format&fit=crop')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-[rgba(3,7,18,0.75)] via-[rgba(3,7,18,0.55)] to-[rgba(3,7,18,0.85)]"></div>
 
-        <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 sm:space-x-reverse mb-4">
-            <input id="searchInput" type="text" class="w-full sm:w-2/5 p-4 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" placeholder="مثال: The Lord of the Rings أو J.R.R. Tolkien">
-            <select id="genreSelect" class="w-full sm:w-1/4 p-4 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"></select>
-            <button id="searchButton" class="w-full sm:w-1/4 px-6 py-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300"></button>
-        </div>
-
-        <div class="mb-8">
-            <input id="advancedFilterInput" type="text" class="w-full p-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" placeholder="تصفية متقدمة: كلمة في العنوان أو الوصف...">
-        </div>
-
-        <div id="compareButtonContainer" class="text-center mb-6 hidden">
-            <button id="compareBooksBtn" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors duration-300"></button>
-        </div>
-
-        <div id="resultsContainer" class="space-y-6">
-            <div id="loadingIndicator" class="hidden flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse">
-                <svg class="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
-                <span id="loadingText"></span>
-            </div>
-            <div id="errorDisplay" class="hidden p-4 bg-red-100 text-red-700 rounded-lg text-center"></div>
-        </div>
-
-        <div id="similarBooksSection" class="mt-8 hidden">
-            <hr class="my-8 border-t-2 border-gray-200">
-            <h2 id="similarBooksTitle" class="text-2xl font-bold text-center text-gray-800 mb-6"></h2>
-            <div id="similarBooksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            <div id="similarBooksLoading" class="hidden flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse">
-                <svg class="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
-                <span id="similarBooksLoadingText"></span>
-            </div>
-            <p id="similarBooksError" class="hidden p-4 bg-red-100 text-red-700 rounded-lg text-center mt-4"></p>
-        </div>
-
-        <div id="socialStatsSection" class="mt-8">
-            <hr class="my-8 border-t-2 border-gray-200">
-            <h2 id="socialStatsTitle" class="text-2xl font-bold text-center text-gray-800 mb-6"></h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="text-center bg-gray-50 p-4 rounded-lg shadow-md flex flex-col items-center justify-center">
-                    <h2 id="qrTitle" class="text-xl font-bold text-gray-800 mb-2"></h2>
-                    <p id="qrDescription" class="text-gray-600 mb-2 text-sm"></p>
-                    <img id="qrCodeImage" class="mx-auto rounded-lg shadow-md w-16 h-16" alt="QR Code">
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col items-center justify-center">
-                    <h3 id="visitorsTitle" class="text-xl font-bold text-gray-800 mb-2"></h3>
-                    <div id="visitorCounterContainer" class="p-2">
-                        <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=94a5bfc8225bba8e89592f2ffd9ee13179b3819f'></script>
-                        <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1386760/t/13"></script>
-                    </div>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col justify-center">
-                    <h3 id="mostSearchedTitle" class="text-xl font-bold text-gray-800 mb-4 text-center"></h3>
-                    <div id="mostSearchedList" class="space-y-2">
-                        <div id="mostSearchedLoading" class="hidden flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse">
-                            <svg class="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                            </svg>
-                            <span id="mostSearchedLoadingText"></span>
-                        </div>
-                        <p id="mostSearchedError" class="hidden text-red-500 text-center"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr class="my-8 border-t-2 border-gray-200">
-        <div class="text-center text-gray-500 text-sm space-y-1">
-            <p><strong>Powered by: Mohamed Abdel Fattah</strong></p>
-            <p>Email: <a href="mailto:moha.fatah@gmail.com" class="text-indigo-500 hover:underline">moha.fatah@gmail.com</a></p>
-        </div>
+    <div class="relative max-w-5xl mx-auto px-4 text-center text-white">
+      <p class="uppercase tracking-widest text-teal-200/90 text-xs sm:text-sm">Unlock a world of knowledge with us</p>
+      <h1 class="mt-3 text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight">Enppi Bibliotheca</h1>
+      <p class="mt-5 max-w-3xl mx-auto text-base sm:text-lg text-slate-200">We provide you with a high‑quality, modern, integrated scientific and cultural library experience. Browse, search and learn through our Books & Audio Library, Events, and Research Services.</p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="book-app.html" class="px-6 py-3 rounded-full bg-[var(--brand)] hover:bg-[var(--brand-700)] text-white font-semibold shadow-soft">Explore the Library</a>
+        <a href="#services" class="px-6 py-3 rounded-full glass border border-white/15 text-white font-semibold">Learn more</a>
+      </div>
     </div>
 
-    <div id="bookStatsModal" class="modal hidden">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 id="bookStatsModalTitle" class="text-2xl font-bold text-gray-800"></h2>
-                <button id="closeBookStatsModalBtn" class="text-gray-500 hover:text-gray-700 text-3xl leading-none">&times;</button>
-            </div>
-
-            <div id="bookDetailsSummary" class="bg-gray-50 p-6 rounded-xl shadow-md mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm"></div>
-
-            <div class="bg-indigo-50 p-4 rounded-xl shadow-inner mb-6">
-                <h3 id="analysisSectionTitle" class="text-xl font-semibold text-indigo-800 mb-4 text-center">التحليلات والخدمات</h3>
-                <div id="modalAnalysisButtons" class="flex flex-wrap justify-center gap-2 mb-4 border-b border-indigo-200"></div>
-                <div id="modalAnalysisOutput" class="space-y-4 p-4 bg-white rounded-lg border border-gray-200 min-h-40">
-                    <p id="analysisInstructions" class="text-center text-gray-500">اختر إحدى خدمات التحليل أعلاه.</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                <div class="bg-blue-50 p-6 rounded-xl shadow-inner">
-                    <h3 id="goodreadsRatingTitle" class="text-xl font-semibold text-gray-800 mb-4"></h3>
-                    <div id="ratingSummary" class="flex items-center space-x-4 space-x-reverse mb-4">
-                        <span id="avgRatingStars" class="text-yellow-500 text-3xl"></span>
-                        <span id="avgRatingValue" class="text-2xl font-bold text-gray-800"></span>
-                    </div>
-                    <p id="totalRatingsCount" class="text-gray-600 mb-6"></p>
-                    <div id="ratingDistribution"></div>
-                </div>
-                <div class="bg-green-50 p-6 rounded-xl shadow-inner">
-                    <h3 id="genresTitle" class="text-xl font-semibold text-gray-800 mb-4"></h3>
-                    <div id="genresTagsContainer" class="flex flex-wrap gap-2"></div>
-                </div>
-            </div>
-
-            <div class="mt-8 bg-gray-50 p-6 rounded-xl shadow-md">
-                <h3 id="pageCountChartTitleModal" class="text-xl font-semibold text-gray-800 mb-4 text-center"></h3>
-                <canvas id="pageCountChartModal" class="max-h-64"></canvas>
-            </div>
+    <!-- Feature cards under hero -->
+    <div class="absolute bottom-0 inset-x-0 translate-y-1/2 px-4">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="rounded-xl bg-slate-900/80 text-white p-5 border border-white/10 shadow-soft">
+          <p class="text-sm text-teal-200">Must‑read books</p>
+          <p class="font-semibold">Curated highlights every week</p>
         </div>
+        <div class="rounded-xl bg-slate-900/80 text-white p-5 border border-white/10 shadow-soft">
+          <p class="text-sm text-teal-200">Upcoming Events</p>
+          <p class="font-semibold">Talks, workshops, meetups</p>
+        </div>
+        <div class="rounded-xl bg-slate-900/80 text-white p-5 border border-white/10 shadow-soft">
+          <p class="text-sm text-teal-200">Audio Library</p>
+          <p class="font-semibold">Listen, learn and grow</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spacer to accommodate floating cards -->
+  <div class="h-24"></div>
+
+  <!-- Stats -->
+  <section id="stats" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="rounded-2xl bg-white shadow-soft p-10 text-center">
+      <p class="text-2xl sm:text-3xl font-extrabold">More Than 3000 Scientific Books</p>
+      <p class="mt-2 text-slate-500">in all engineering disciplines</p>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+    <div class="rounded-2xl bg-[url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1640&auto=format&fit=crop')] bg-cover bg-center p-10 text-center text-white shadow-soft">
+      <div class="backdrop-brightness-75 rounded-2xl p-8">
+        <p class="text-2xl sm:text-3xl font-extrabold">More Than 2000 Cultural Books</p>
+        <p class="mt-2 text-slate-200">Encyclopedias, novels, religion, law & more</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+    <blockquote class="text-center text-xl sm:text-2xl font-semibold text-slate-700">
+      <span class="text-slate-500">“An investment in </span><span class="text-[var(--brand-700)]">knowledge</span><span class="text-slate-500]"> pays the best interest.”</span>
+      <footer class="mt-2 text-sm text-slate-500">— Benjamin Franklin</footer>
+    </blockquote>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 grid md:grid-cols-2 gap-6">
+    <div class="rounded-2xl bg-white p-8 shadow-soft">
+      <h3 class="text-xl font-bold">Who we are</h3>
+      <p class="mt-3 text-slate-600">Established in 1978, Enppi Library serves as an information center to serve engineering and energy sectors. The library supports both the organization and the public through curated collections, digital services and learning spaces with global information resources.</p>
+    </div>
+    <div class="rounded-2xl bg-white p-8 shadow-soft">
+      <h3 class="text-xl font-bold">What we do</h3>
+      <ul class="mt-3 space-y-2 text-slate-600 list-disc list-inside">
+        <li>Provide a wide range of academic readings</li>
+        <li>Offer audio books and cultural materials</li>
+        <li>Host events, talks and workshops</li>
+        <li>Support e‑learning and research platforms</li>
+        <li>Maintain academic & research projects database</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
+    <h3 class="text-2xl font-extrabold text-center">Our Services</h3>
+    <p class="text-center text-slate-500 mt-1">We offer a whole range of cultural & academic activities.</p>
+
+    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">A</div>
+        <p class="mt-3 font-semibold">Codes & Standards</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">B</div>
+        <p class="mt-3 font-semibold">Books & References</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">C</div>
+        <p class="mt-3 font-semibold">Online Subscriptions</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">D</div>
+        <p class="mt-3 font-semibold">Borrowing</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">E</div>
+        <p class="mt-3 font-semibold">Cultural Trips</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">F</div>
+        <p class="mt-3 font-semibold">Project Gallery</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">G</div>
+        <p class="mt-3 font-semibold">Academic Library</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 text-center shadow-soft">
+        <div class="h-10 w-10 mx-auto rounded-lg bg-teal-100 text-teal-700 grid place-items-center font-bold">H</div>
+        <p class="mt-3 font-semibold">Research Support</p>
+      </div>
     </div>
 
-    <div id="readingPlanModal" class="modal hidden">
-        <div class="modal-content text-center max-w-sm">
-            <h3 id="modalTitle" class="text-xl font-bold text-gray-800 mb-4"></h3>
-            <label id="modalLabel" for="daysInput" class="block text-gray-700 mb-2"></label>
-            <input id="daysInput" type="number" class="w-full p-2 border border-gray-300 rounded-md mb-4 text-center" min="1" value="7">
-            <div class="flex justify-center space-x-4 space-x-reverse">
-                <button id="modalConfirmBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300"></button>
-                <button id="modalCancelBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-300"></button>
-            </div>
-        </div>
+    <div class="text-center mt-10">
+      <a href="book-app.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--brand)] hover:bg-[var(--brand-700)] text-white font-semibold shadow-soft">Start Exploring<span aria-hidden>→</span></a>
     </div>
+  </section>
 
-    <script type="module">
-        // --- Global state ---
-        let userId = null;
-        let isAuthReady = false;
-        let currentBookForReadingPlan = null;
-        let booksData = {};
-        let chatHistories = {};
-        let analysisCache = {};
-        let comparisonBooks = [];
-        let pageCountChartModalInstance = null;
+  <!-- Footer -->
+  <footer class="mt-16 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-3">
+      <p class="text-slate-500 text-sm">© <span id="year"></span> Enppi Bibliotheca</p>
+      <p class="text-slate-500 text-sm">Built with ❤️ — <a href="book-app.html" class="text-[var(--brand-700)] hover:underline">Open the Library App</a></p>
+    </div>
+  </footer>
 
-        // API keys
-        const googleBooksApiKey = ""; 
-        const geminiApiKey = ""; // Add your key for full features
-        const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent`;
-        const geminiTtsApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent`;
-        const geminiFeaturesEnabled = Boolean(geminiApiKey);
-
-        // --- TTS helpers ---
-        function base64ToArrayBuffer(base64) {
-            const binaryString = atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
-            return bytes.buffer;
-        }
-        function pcmToWav(pcm16, sampleRate = 24000) {
-            const numChannels = 1; const bitsPerSample = 16;
-            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
-            const blockAlign = numChannels * (bitsPerSample / 8);
-            const dataSize = pcm16.byteLength;
-            const buffer = new ArrayBuffer(44 + dataSize);
-            const view = new DataView(buffer);
-            let offset = 0;
-            function writeString(str) { for (let i = 0; i < str.length; i++) view.setUint8(offset++, str.charCodeAt(i)); }
-            writeString('RIFF'); view.setUint32(offset, 36 + dataSize, true); offset += 4; writeString('WAVE');
-            writeString('fmt '); view.setUint32(offset, 16, true); offset += 4; view.setUint16(offset, 1, true); offset += 2;
-            view.setUint16(offset, numChannels, true); offset += 2; view.setUint32(offset, sampleRate, true); offset += 4;
-            view.setUint32(offset, byteRate, true); offset += 4; view.setUint16(offset, blockAlign, true); offset += 2;
-            view.setUint16(offset, bitsPerSample, true); offset += 2; writeString('data'); view.setUint32(offset, dataSize, true); offset += 4;
-            const pcmBytes = new Uint8Array(buffer, 44); pcmBytes.set(new Uint8Array(pcm16.buffer));
-            return new Blob([buffer], { type: 'audio/wav' });
-        }
-        function playAudio(wavBlob) { const audioUrl = URL.createObjectURL(wavBlob); new Audio(audioUrl).play().catch(() => {}); }
-
-        // --- i18n strings ---
-        const strings = {
-            ar: {
-                mainTitle: 'دليلك للكتب والإحصاء',
-                subtitle: 'أدخل اسم كتاب أو مؤلف للعثور على إحصائياته.',
-                placeholder: 'مثال: The Lord of the Rings أو J.R.R. Tolkien',
-                searchButton: 'بحث',
-                loadingText: 'جاري البحث عن الكتب...',
-                errorNoQuery: 'الرجاء إدخال اسم كتاب أو مؤلف.',
-                errorFetch: 'حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.',
-                errorNoBooks: 'لم يتم العثور على كتب تطابق بحثك.',
-                pageCount: (count) => `${count} صفحة`,
-                rating: (rating) => `${rating} / 5`,
-                ratingsCount: (count) => `${count} تقييم`,
-                authorsLabel: 'المؤلف(ون):',
-                publishedDateLabel: 'تاريخ النشر:',
-                pageCountLabel: 'عدد الصفحات:',
-                ratingLabel: 'متوسط التقييم:',
-                ratingsCountLabel: 'عدد التقييمات:',
-                publisherLabel: 'دار النشر:',
-                isbnLabel: 'ISBN:',
-                categoryLabel: 'التصنيف:',
-                similarBooksButton: 'كتب مشابهة',
-                similarBooksTitle: 'كتب مشابهة',
-                similarBooksLoading: 'جاري البحث عن كتب مشابهة...',
-                similarBooksError: 'لم يتم العثور على كتب مشابهة.',
-                readingPlanButton: '✨ خطة القراءة',
-                readingPlanTitle: 'خطة القراءة',
-                readingPlanLoading: 'جاري إعداد خطة القراءة...',
-                readingPlanError: 'لم نتمكن من إعداد خطة القراءة. يرجى المحاولة مرة أخرى.',
-                readingPlanModalTitle: 'إنشاء خطة قراءة',
-                readingPlanModalLabel: 'أدخل عدد الأيام التي تريد أن تنهي فيها الكتاب:',
-                readingPlanModalConfirm: 'إنشاء الخطة',
-                readingPlanModalCancel: 'إلغاء',
-                writeReviewButton: '✨ اكتب مراجعة',
-                reviewTitle: 'مراجعة الكتاب',
-                reviewLoading: 'جاري كتابة المراجعة...',
-                reviewError: 'لم نتمكن من كتابة مراجعة. يرجى المحاولة مرة أخرى.',
-                genres: {
-                    all: 'الكل', fiction: 'خيال', fantasy: 'فنتازيا', mystery: 'غموض', thriller: 'إثارة', romance: 'رومانسي', biography: 'سيرة ذاتية', history: 'تاريخ', science: 'علم', cooking: 'طبخ', authors: 'مؤلفون', arab: 'عربي', analytica: 'دراسة تحليلية', islamichistory: 'تاريخ إسلامي', philosophy: 'فلسفة', thegeniuseseries: 'سلسلة العباقرة', socialscience: 'علوم اجتماعية', juvenilefiction: 'أدب أطفال', buddhism: 'بوذية', literarycollections: 'مجموعات أدبية', religion: 'دين', nonfiction: 'غير خيالي'
-                },
-                downloadButton: 'تحميل الكتاب',
-                googleBookLink: 'عرض على جوجل بوكس',
-                qrTitle: 'مسح ضوئي للموقع',
-                qrDescription: 'يمكنك مسح هذا الرمز للوصول إلى الموقع مباشرة.',
-                socialStatsTitle: 'إحصائيات اجتماعية',
-                visitorsTitle: 'عدد الزوار',
-                mostSearchedTitle: 'الكتب الأكثر بحثًا',
-                mostSearchedLoadingText: 'جاري تحميل الكتب الأكثر بحثاً...',
-                chatButton: '✨ تحدث مع الكتاب',
-                chatTitle: 'دردشة مع الكتاب',
-                chatPlaceholder: 'اطرح سؤالاً عن الكتاب...',
-                chatSendButton: 'إرسال',
-                chatBotInitialMessage: 'مرحباً، أنا هنا للإجابة عن أسئلتك حول هذا الكتاب.',
-                chatLoading: 'جاري التفكير...',
-                chatError: 'عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.',
-                bookStatsButton: '📊 إحصائيات الكتاب',
-                goodreadsRatingTitle: 'تقييم جوجل بوكس',
-                genresTitle: 'تصنيفات الكتاب',
-                pageCountChartTitleModal: 'عدد الصفحات',
-                compareButton: 'مقارنة الكتابين',
-                addToCompare: '✨ للمقارنة',
-                compareTitle: 'تحليل ومقارنة الكتب',
-                compareLoading: 'جاري تحليل ومقارنة الكتابين...',
-                compareError: 'حدث خطأ أثناء مقارنة الكتابين. يرجى المحاولة مرة أخرى.',
-                tabStats: 'الإحصائيات',
-                tabReadingPlan: 'خطة القراءة',
-                tabReview: 'المراجعة',
-                tabChat: 'الدردشة',
-                tabQuotes: 'المقولات',
-                quotesTitle: 'مقولات مختارة',
-                quotesLoading: 'جاري جمع المقولات...',
-                quotesError: 'تعذر جمع المقولات. حاول مجددًا.',
-                geminiFeatureMessage: 'هذه الميزة تتطلب مفتاح Gemini API صالحاً.',
-                geminiFeatureAction: 'أضف المفتاح لتفعيل التحليلات.'
-            },
-            en: {
-                mainTitle: 'Your Guide to Books and Statistics',
-                subtitle: 'Enter a book or author name to find its statistics.',
-                placeholder: 'Example: The Lord of the Rings or J.R.R. Tolkien',
-                searchButton: 'Search',
-                loadingText: 'Searching for books...',
-                errorNoQuery: 'Please enter a book or author name.',
-                errorFetch: 'An error occurred during search. Please try again.',
-                errorNoBooks: 'No books found matching your search.',
-                pageCount: (count) => `${count} pages`,
-                rating: (rating) => `${rating} / 5`,
-                ratingsCount: (count) => `${count} ratings`,
-                authorsLabel: 'Author(s):',
-                publishedDateLabel: 'Published Date:',
-                pageCountLabel: 'Page Count:',
-                ratingLabel: 'Average Rating:',
-                ratingsCountLabel: 'Number of Ratings:',
-                publisherLabel: 'Publisher:',
-                isbnLabel: 'ISBN:',
-                categoryLabel: 'Category:',
-                similarBooksButton: 'Similar Books',
-                similarBooksTitle: 'Similar Books',
-                similarBooksLoading: 'Searching for similar books...',
-                similarBooksError: 'No similar books found.',
-                readingPlanButton: '✨ Reading Plan',
-                readingPlanTitle: 'Reading Plan',
-                readingPlanLoading: 'Generating reading plan...',
-                readingPlanError: 'Could not generate a reading plan. Please try again.',
-                readingPlanModalTitle: 'Create Reading Plan',
-                readingPlanModalLabel: 'Enter the number of days to finish the book:',
-                readingPlanModalConfirm: 'Create Plan',
-                readingPlanModalCancel: 'Cancel',
-                writeReviewButton: '✨ Write a review',
-                reviewTitle: 'Book Review',
-                reviewLoading: 'Writing review...',
-                reviewError: 'Could not write a review. Please try again.',
-                genres: {
-                    all: 'All', fiction: 'Fiction', fantasy: 'Fantasy', mystery: 'Mystery', thriller: 'Thriller', romance: 'Romance', biography: 'Biography', history: 'History', science: 'Science', cooking: 'Cooking', authors: 'Authors', arab: 'Arab', analytica: 'Analytical Study', islamichistory: 'Islamic History', philosophy: 'Philosophy', thegeniuseseries: 'The Geniuses Series', socialscience: 'Social Science', juvenilefiction: 'Juvenile Fiction', buddhism: 'Buddhism', literarycollections: 'Literary Collections', religion: 'Religion', nonfiction: 'Non-Fiction'
-                },
-                downloadButton: 'Download Book',
-                googleBookLink: 'View on Google Books',
-                qrTitle: 'Scan to Visit Website',
-                qrDescription: 'You can scan this code to visit the website directly.',
-                socialStatsTitle: 'Social Statistics',
-                visitorsTitle: 'Visitor Count',
-                mostSearchedTitle: 'Most Searched Books',
-                mostSearchedLoadingText: 'Loading most searched books...',
-                chatButton: '✨ Chat with Book',
-                chatTitle: 'Chat with Book',
-                chatPlaceholder: 'Ask a question about the book...',
-                chatSendButton: 'Send',
-                chatBotInitialMessage: 'Hello, I am here to answer your questions about this book.',
-                chatLoading: 'Thinking...',
-                chatError: 'Sorry, an error occurred. Please try again.',
-                bookStatsButton: '📊 Book Statistics',
-                goodreadsRatingTitle: 'Google Books Rating',
-                genresTitle: 'Book Genres',
-                pageCountChartTitleModal: 'Page Count',
-                compareButton: 'Compare Two Books',
-                addToCompare: '✨ Add to Compare',
-                compareTitle: 'Book Comparison Analysis',
-                compareLoading: 'Analyzing and comparing books...',
-                compareError: 'An error occurred while comparing the books. Please try again.',
-                tabStats: 'Statistics',
-                tabReadingPlan: 'Reading Plan',
-                tabReview: 'Review',
-                tabChat: 'Chat',
-                tabQuotes: 'Quotes',
-                quotesTitle: 'Selected Quotes',
-                quotesLoading: 'Gathering quotes...',
-                quotesError: 'Could not gather quotes. Please try again.',
-                geminiFeatureMessage: 'This feature requires a valid Gemini API key.',
-                geminiFeatureAction: 'Add a key to enable analyses.'
-            }
-        };
-
-        let currentLang = 'ar';
-        const htmlElement = document.documentElement;
-
-        function updateUI(lang) {
-            currentLang = lang;
-            const s = strings[lang];
-            htmlElement.lang = lang; htmlElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            document.body.setAttribute('lang', lang);
-            const mainTitleEl = document.getElementById('mainTitle'); if (mainTitleEl) mainTitleEl.textContent = s.mainTitle;
-            const subtitleEl = document.getElementById('subtitle'); if (subtitleEl) subtitleEl.textContent = s.subtitle;
-            const searchInputEl = document.getElementById('searchInput'); if (searchInputEl) searchInputEl.placeholder = s.placeholder;
-            const searchButtonEl = document.getElementById('searchButton'); if (searchButtonEl) searchButtonEl.textContent = s.searchButton;
-            const loadingTextEl = document.getElementById('loadingText'); if (loadingTextEl) loadingTextEl.textContent = s.loadingText;
-            const langToggleBtnEl = document.getElementById('langToggleBtn'); if (langToggleBtnEl) langToggleBtnEl.textContent = lang === 'ar' ? 'English' : 'العربية';
-            const similarBooksTitleEl = document.getElementById('similarBooksTitle'); if (similarBooksTitleEl) similarBooksTitleEl.textContent = s.similarBooksTitle;
-            const similarBooksLoadingTextEl = document.getElementById('similarBooksLoadingText'); if (similarBooksLoadingTextEl) similarBooksLoadingTextEl.textContent = s.similarBooksLoading;
-            const modalTitleEl = document.getElementById('modalTitle'); if (modalTitleEl) modalTitleEl.textContent = s.readingPlanModalTitle;
-            const modalLabelEl = document.getElementById('modalLabel'); if (modalLabelEl) modalLabelEl.textContent = s.readingPlanModalLabel;
-            const modalConfirmBtnEl = document.getElementById('modalConfirmBtn'); if (modalConfirmBtnEl) modalConfirmBtnEl.textContent = s.readingPlanModalConfirm;
-            const modalCancelBtnEl = document.getElementById('modalCancelBtn'); if (modalCancelBtnEl) modalCancelBtnEl.textContent = s.readingPlanModalCancel;
-            const qrTitleEl = document.getElementById('qrTitle'); if (qrTitleEl) qrTitleEl.textContent = s.qrTitle;
-            const qrDescriptionEl = document.getElementById('qrDescription'); if (qrDescriptionEl) qrDescriptionEl.textContent = s.qrDescription;
-            const socialStatsTitleEl = document.getElementById('socialStatsTitle'); if (socialStatsTitleEl) socialStatsTitleEl.textContent = s.socialStatsTitle;
-            const visitorsTitleEl = document.getElementById('visitorsTitle'); if (visitorsTitleEl) visitorsTitleEl.textContent = s.visitorsTitle;
-            const mostSearchedTitleEl = document.getElementById('mostSearchedTitle'); if (mostSearchedTitleEl) mostSearchedTitleEl.textContent = s.mostSearchedTitle;
-            const mostSearchedLoadingTextEl = document.getElementById('mostSearchedLoadingText'); if (mostSearchedLoadingTextEl) mostSearchedLoadingTextEl.textContent = s.mostSearchedLoadingText;
-            const compareBooksBtnEl = document.getElementById('compareBooksBtn'); if (compareBooksBtnEl) compareBooksBtnEl.textContent = s.compareButton;
-            document.querySelectorAll('.compare-add-btn').forEach(btn => btn.textContent = s.addToCompare);
-            document.querySelectorAll('.book-stats-btn').forEach(btn => btn.textContent = s.bookStatsButton);
-            document.querySelectorAll('.similar-book-btn').forEach(btn => btn.textContent = s.similarBooksButton);
-            const genreSelect = document.getElementById('genreSelect');
-            if (genreSelect) { genreSelect.innerHTML = ''; for (const key in s.genres) { const option = document.createElement('option'); option.value = key; option.textContent = s.genres[key]; genreSelect.appendChild(option); } }
-            const bookStatsModalTitleEl = document.getElementById('bookStatsModalTitle'); if (bookStatsModalTitleEl) bookStatsModalTitleEl.textContent = s.bookStatsButton.replace('📊 ', '');
-            const goodreadsRatingTitleEl = document.getElementById('goodreadsRatingTitle'); if (goodreadsRatingTitleEl) goodreadsRatingTitleEl.textContent = s.goodreadsRatingTitle;
-            const genresTitleEl = document.getElementById('genresTitle'); if (genresTitleEl) genresTitleEl.textContent = s.genresTitle;
-            const pageCountChartTitleModalEl = document.getElementById('pageCountChartTitleModal'); if (pageCountChartTitleModalEl) pageCountChartTitleModalEl.textContent = s.pageCountChartTitleModal;
-        }
-
-        window.onload = async () => {
-            const savedLang = localStorage.getItem('lang'); if (savedLang) { currentLang = savedLang; }
-            updateUI(currentLang);
-            const qrCodeImage = document.getElementById('qrCodeImage');
-            if (qrCodeImage) qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://book-list-library.edgeone.app/';
-
-            const searchInput = document.getElementById('searchInput');
-            const searchButton = document.getElementById('searchButton');
-            const resultsContainer = document.getElementById('resultsContainer');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const errorDisplay = document.getElementById('errorDisplay');
-            const langToggleBtn = document.getElementById('langToggleBtn');
-            const similarBooksSection = document.getElementById('similarBooksSection');
-            const similarBooksContainer = document.getElementById('similarBooksContainer');
-            const similarBooksLoading = document.getElementById('similarBooksLoading');
-            const similarBooksError = document.getElementById('similarBooksError');
-            const readingPlanModal = document.getElementById('readingPlanModal');
-            const daysInput = document.getElementById('daysInput');
-            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-            const modalCancelBtn = document.getElementById('modalCancelBtn');
-            const bookStatsModal = document.getElementById('bookStatsModal');
-            const closeBookStatsModalBtn = document.getElementById('closeBookStatsModalBtn');
-            const compareBooksBtn = document.getElementById('compareBooksBtn');
-            const compareButtonContainer = document.getElementById('compareButtonContainer');
-            const modalAnalysisButtons = document.getElementById('modalAnalysisButtons');
-            const modalAnalysisOutput = document.getElementById('modalAnalysisOutput');
-            const bookDetailsSummary = document.getElementById('bookDetailsSummary');
-
-            const tabMappings = {
-                'tab-stats': { elementId: 'stats-content', buttonLabelKey: 'tabStats', isDefault: true },
-                'tab-reading-plan': { elementId: 'reading-plan-content', buttonLabelKey: 'tabReadingPlan', function: (id) => showAnalysis(id, 'readingPlan') },
-                'tab-review': { elementId: 'review-content', buttonLabelKey: 'tabReview', function: (id) => showAnalysis(id, 'review') },
-                'tab-chat': { elementId: 'chat-content', buttonLabelKey: 'tabChat', function: (id) => showAnalysis(id, 'chat') },
-                'tab-quotes': { elementId: 'quotes-content', buttonLabelKey: 'tabQuotes', function: (id) => showAnalysis(id, 'quotes') },
-            };
-
-            function activateTab(tabId, bookId) {
-                document.querySelectorAll('#modalAnalysisButtons button').forEach(btn => {
-                    btn.classList.remove('active', 'bg-indigo-600', 'text-white');
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                });
-                document.querySelectorAll('.tab-content-pane').forEach(pane => pane.classList.add('hidden'));
-                const buttonElement = document.getElementById(tabId);
-                if (buttonElement && buttonElement.hasAttribute('disabled')) return; // Gated
-                if (tabId === 'tab-stats') {
-                    modalAnalysisOutput.innerHTML = `<p id="analysisInstructions" class="text-center text-gray-500">${currentLang === 'ar' ? 'اختر إحدى خدمات التحليل أعلاه.' : 'Choose an analysis service above.'}</p>`;
-                    if (buttonElement) {
-                        buttonElement.classList.add('active', 'bg-indigo-600', 'text-white');
-                        buttonElement.classList.remove('bg-gray-200', 'text-gray-700');
-                    }
-                    return;
-                }
-                const contentElement = document.getElementById(tabMappings[tabId].elementId);
-                if (contentElement) contentElement.classList.remove('hidden');
-                if (buttonElement) {
-                    buttonElement.classList.add('active', 'bg-indigo-600', 'text-white');
-                    buttonElement.classList.remove('bg-gray-200', 'text-gray-700');
-                }
-                if (tabMappings[tabId].function) {
-                    tabMappings[tabId].function(bookId);
-                }
-            }
-
-            function showAnalysis(bookId, type) {
-                const tabId = `tab-${type}`;
-                const tabMapping = tabMappings[tabId];
-                if (!tabMapping) return;
-                const container = document.getElementById(tabMapping.elementId);
-                if (!container) return;
-
-                const cacheKey = `${bookId}-${type}`;
-
-                if (!geminiFeaturesEnabled) {
-                    container.innerHTML = `<div class="p-4 bg-yellow-50 border border-yellow-200 rounded text-sm text-gray-700 text-center">${strings[currentLang].geminiFeatureMessage} ${strings[currentLang].geminiFeatureAction}</div>`;
-                    return;
-                }
-
-                if (type !== 'chat' && analysisCache[cacheKey]) {
-                    container.innerHTML = analysisCache[cacheKey];
-                    return;
-                }
-
-                if (type === 'readingPlan') {
-                    currentBookForReadingPlan = booksData[bookId];
-                    readingPlanModal.classList.remove('hidden');
-                } else if (type === 'review') {
-                    generateBookReview(booksData[bookId], container, cacheKey);
-                } else if (type === 'chat') {
-                    chatWithBook(booksData[bookId], container);
-                } else if (type === 'quotes') {
-                    generateBookQuotes(booksData[bookId], container, cacheKey);
-                }
-            }
-
-            modalAnalysisButtons.addEventListener('click', (e) => {
-                const button = e.target.closest('.tab-button');
-                if (!button || button.hasAttribute('disabled')) return;
-                const bookId = bookStatsModal.dataset.currentBookId;
-                if (!bookId) return;
-                activateTab(button.id, bookId);
-            });
-
-            closeBookStatsModalBtn.addEventListener('click', () => {
-                bookStatsModal.classList.add('hidden');
-                if (pageCountChartModalInstance) { pageCountChartModalInstance.destroy(); pageCountChartModalInstance = null; }
-            });
-
-            langToggleBtn.addEventListener('click', () => {
-                const newLang = currentLang === 'ar' ? 'en' : 'ar';
-                localStorage.setItem('lang', newLang);
-                updateUI(newLang);
-                if (Object.keys(booksData).length > 0 && resultsContainer.children.length > 0) {
-                    displayResults(Object.values(booksData));
-                }
-            });
-
-            searchButton.addEventListener('click', () => {
-                const query = searchInput.value.trim();
-                const genre = document.getElementById('genreSelect').value;
-                const advancedFilter = document.getElementById('advancedFilterInput').value.trim();
-                let fullQuery = query; if (advancedFilter) fullQuery += ` ${advancedFilter}`;
-                if (fullQuery.length === 0 && genre === 'all') { displayError(strings[currentLang].errorNoQuery); return; }
-                fetchBooks(fullQuery, genre);
-            });
-            searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchButton.click(); });
-            document.getElementById('advancedFilterInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') searchButton.click(); });
-
-            compareBooksBtn.addEventListener('click', () => {
-                if (comparisonBooks.length === 2) {
-                    if (!geminiFeaturesEnabled) {
-                        const comparisonDiv = document.createElement('div');
-                        comparisonDiv.className = 'mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-700 text-center';
-                        comparisonDiv.textContent = `${strings[currentLang].geminiFeatureMessage} ${strings[currentLang].geminiFeatureAction}`;
-                        resultsContainer.prepend(comparisonDiv);
-                        return;
-                    }
-                    compareBooksAnalysis(booksData[comparisonBooks[0]], booksData[comparisonBooks[1]]);
-                }
-            });
-
-            resultsContainer.addEventListener('click', async (e) => {
-                const similarButton = e.target.closest('.similar-book-btn');
-                const statsButton = e.target.closest('.book-stats-btn');
-                const compareAddButton = e.target.closest('.compare-add-btn');
-                const bookCard = e.target.closest('.book-card');
-                if (!bookCard) return;
-                if (similarButton) {
-                    const bookId = similarButton.dataset.bookId; if (booksData[bookId]) await fetchSimilarBooks(booksData[bookId]);
-                } else if (statsButton) {
-                    const bookId = statsButton.dataset.bookId; if (booksData[bookId]) displayBookStatsModal(booksData[bookId]);
-                } else if (compareAddButton) {
-                    const bookId = compareAddButton.dataset.bookId; toggleBookComparison(bookId);
-                }
-            });
-
-            modalConfirmBtn.addEventListener('click', () => {
-                const days = daysInput.value;
-                if (days > 0 && currentBookForReadingPlan) {
-                    const container = document.getElementById('reading-plan-content');
-                    generateReadingPlan(currentBookForReadingPlan, days, container, `${currentBookForReadingPlan.id}-readingPlan`);
-                    readingPlanModal.classList.add('hidden');
-                    activateTab('tab-reading-plan', currentBookForReadingPlan.id);
-                }
-            });
-            modalCancelBtn.addEventListener('click', () => { readingPlanModal.classList.add('hidden'); });
-
-            function toggleBookComparison(bookId) {
-                const index = comparisonBooks.indexOf(bookId);
-                const button = document.querySelector(`button[data-book-id="${bookId}"].compare-add-btn`);
-                if (index > -1) {
-                    comparisonBooks.splice(index, 1);
-                    if (button) { button.classList.remove('bg-green-600', 'hover:bg-green-700'); button.classList.add('bg-gray-500', 'hover:bg-gray-600'); button.textContent = strings[currentLang].addToCompare; }
-                } else if (comparisonBooks.length < 2) {
-                    comparisonBooks.push(bookId);
-                    if (button) { button.classList.remove('bg-gray-500', 'hover:bg-gray-600'); button.classList.add('bg-green-600', 'hover:bg-green-700'); button.textContent = '✅'; }
-                } else {
-                    alert(currentLang === 'ar' ? 'يمكنك مقارنة كتابين كحد أقصى. يرجى إزالة كتاب واحد أولاً.' : 'You can only compare a maximum of two books. Please remove one first.');
-                    return;
-                }
-                if (comparisonBooks.length === 2) {
-                    compareBooksBtn.textContent = strings[currentLang].compareButton + ` (${comparisonBooks.length})`;
-                    compareButtonContainer.classList.remove('hidden');
-                } else if (comparisonBooks.length === 1) {
-                    compareBooksBtn.textContent = strings[currentLang].compareButton + ` (${comparisonBooks.length}/2)`;
-                    compareButtonContainer.classList.add('hidden');
-                } else {
-                    compareButtonContainer.classList.add('hidden');
-                }
-            }
-
-            async function compareBooksAnalysis(book1, book2) {
-                const comparisonDiv = document.createElement('div');
-                comparisonDiv.id = 'comparison-output';
-                comparisonDiv.className = 'mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-700 whitespace-pre-wrap space-y-4';
-                resultsContainer.prepend(comparisonDiv);
-                comparisonDiv.innerHTML = `<h3 class="text-xl font-bold text-center text-gray-800 mb-4">${strings[currentLang].compareTitle}</h3><div class="space-y-6"><div class="flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse"><svg class="animate-spin h-6 w-6" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span class="loading-text">${strings[currentLang].compareLoading}</span></div></div>`;
-                const prompt = `Compare the books: 1. Title: ${book1.volumeInfo.title}, Author: ${book1.volumeInfo.authors ? book1.volumeInfo.authors.join(', ') : 'Unknown'} 2. Title: ${book2.volumeInfo.title}, Author: ${book2.volumeInfo.authors ? book2.volumeInfo.authors.join(', ') : 'Unknown'} Provide a detailed analysis covering: Themes, style, target audience, and key differences and similarities. Format the output clearly. The analysis must be in ${currentLang === 'ar' ? 'Arabic' : 'English'}.`;
-                const systemPrompt = `You are a comparative literature specialist. Your goal is to analyze and contrast two provided books in depth. Use Google Search to enrich your knowledge about both books before writing the final comparison.`;
-                try {
-                    const comparisonText = await fetchGeminiContent(prompt, { "google_search": {} }, { parts: [{ text: systemPrompt }] });
-                    comparisonDiv.innerHTML = `<h3 class="text-xl font-bold text-center text-gray-800 mb-4">${strings[currentLang].compareTitle}</h3><div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">${comparisonText}</div>`;
-                } catch (error) {
-                    comparisonDiv.innerHTML = `<h3 class="text-xl font-bold text-center text-gray-800 mb-4">${strings[currentLang].compareTitle}</h3><p class="text-red-500 text-center">${strings[currentLang].compareError}</p>`;
-                } finally {
-                    comparisonBooks = []; updateUI(currentLang);
-                    document.querySelectorAll('.compare-add-btn').forEach(btn => { btn.classList.remove('bg-green-600', 'hover:bg-green-700'); btn.classList.add('bg-gray-500', 'hover:bg-gray-600'); btn.textContent = strings[currentLang].addToCompare; });
-                }
-            }
-
-            async function generateReadingPlan(bookData, days, container, cacheKey) {
-                container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].readingPlanTitle}</h3><div class=\"space-y-6\"><div class=\"flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse\"><svg class=\"animate-spin h-6 w-6\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v8H4z\"></path></svg><span class=\"loading-text\">${strings[currentLang].readingPlanLoading}</span></div></div>`;
-                const title = bookData.volumeInfo.title || 'a book';
-                const authors = bookData.volumeInfo.authors ? `by ${bookData.volumeInfo.authors.join(', ')}` : '';
-                const pageCount = bookData.volumeInfo.pageCount || 200;
-                const prompt = `Create a day-by-day reading plan to finish the book "${title}" ${authors}, which is approximately ${pageCount} pages long, in ${days} days. Format the response as a bulleted list with each day's target. Please provide the plan in ${currentLang === 'ar' ? 'Arabic' : 'English'}.`;
-                try {
-                    const planText = await fetchGeminiContent(prompt);
-                    const outputHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].readingPlanTitle}</h3><div class=\"mt-4 p-4 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 whitespace-pre-wrap\">${planText}</div>`;
-                    container.innerHTML = outputHTML; analysisCache[cacheKey] = outputHTML;
-                } catch (error) {
-                    container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].readingPlanTitle}</h3><p class=\"text-red-500 text-center\">${strings[currentLang].readingPlanError}</p>`;
-                }
-            }
-
-            async function generateBookReview(bookData, container, cacheKey) {
-                container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].reviewTitle}</h3><div class=\"space-y-6\"><div class=\"flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse\"><svg class=\"animate-spin h-6 w-6\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v8H4z\"></path></svg><span class=\"loading-text\">${strings[currentLang].reviewLoading}</span></div></div>`;
-                const title = bookData.volumeInfo.title || '';
-                const authors = bookData.volumeInfo.authors ? bookData.volumeInfo.authors.join(', ') : '';
-                const prompt = `Summarize key reviews for the book "${title}" by ${authors}. Provide a concise overview of the general sentiment and common themes found in the reviews. The response should be in ${currentLang === 'ar' ? 'Arabic' : 'English'}.`;
-                const systemPrompt = `Act as an expert book critic. Summarize key points from web reviews for a given book. Focus on the general sentiment, common critiques, and key themes.`;
-                try {
-                    const reviewText = await fetchGeminiContent(prompt, { "google_search": {} }, { parts: [{ text: systemPrompt }] });
-                    const outputHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].reviewTitle}</h3><div class=\"mt-4 p-4 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 whitespace-pre-wrap\">${reviewText}</div>`;
-                    container.innerHTML = outputHTML; analysisCache[cacheKey] = outputHTML;
-                } catch (error) {
-                    container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].reviewTitle}</h3><p class=\"text-red-500 text-center\">${strings[currentLang].reviewError}</p>`;
-                }
-            }
-
-            async function chatWithBook(bookData, container) {
-                if (!container) return;
-                const bookId = bookData.id;
-                container.innerHTML = `
-                    <div id="chat-output-modal-${bookId}" class="mt-4 p-4 bg-gray-100 rounded-lg text-sm whitespace-pre-wrap">
-                        <h3 class="text-xl font-bold text-center text-gray-800 mb-4">${strings[currentLang].chatTitle}</h3>
-                        <div id="chat-history-modal-${bookId}" class="flex flex-col space-y-2 mb-4 max-h-60 overflow-y-auto min-h-20"></div>
-                        <div class="flex gap-2">
-                            <input id="chat-input-modal-${bookId}" type="text" placeholder="${strings[currentLang].chatPlaceholder}" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <button id="chat-send-btn-modal-${bookId}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300">${strings[currentLang].chatSendButton}</button>
-                        </div>
-                    </div>
-                `;
-                const chatInput = document.getElementById(`chat-input-modal-${bookId}`);
-                const chatSendBtn = document.getElementById(`chat-send-btn-modal-${bookId}`);
-                function addMessageToChat(bookId, message, sender) {
-                    const chatHistoryDiv = document.getElementById(`chat-history-modal-${bookId}`);
-                    if (!chatHistoryDiv) return;
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `chat-message ${sender === 'user' ? 'chat-user-message' : 'chat-bot-message'}`;
-                    messageDiv.textContent = message;
-                    chatHistoryDiv.appendChild(messageDiv);
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
-                }
-                if (!chatHistories[bookId] || chatHistories[bookId].length === 0) {
-                    addMessageToChat(bookId, strings[currentLang].chatBotInitialMessage, 'bot');
-                    chatHistories[bookId] = [];
-                } else {
-                    chatHistories[bookId].forEach(msg => { if (msg.role === 'user') addMessageToChat(bookId, msg.parts[0].text, 'user'); if (msg.role === 'model') addMessageToChat(bookId, msg.parts[0].text, 'bot'); });
-                }
-                async function sendMessage(bookId, inputElement) {
-                    const userMessage = inputElement.value.trim(); if (!userMessage) return; addMessageToChat(bookId, userMessage, 'user'); inputElement.value='';
-                    chatHistories[bookId].push({ role: 'user', parts: [{ text: userMessage }] });
-                    const loadingIndicator = document.createElement('div');
-                    loadingIndicator.className = 'flex items-center space-x-2 space-x-reverse text-indigo-600 font-semibold';
-                    loadingIndicator.innerHTML = `<svg class=\"animate-spin h-4 w-4\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v8H4z\"></path></svg><span>${strings[currentLang].chatLoading}</span>`;
-                    const chatHistoryDiv = document.getElementById(`chat-history-modal-${bookId}`); if (chatHistoryDiv) { chatHistoryDiv.appendChild(loadingIndicator); chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; }
-                    try {
-                        if (!geminiFeaturesEnabled) throw new Error('Gemini disabled');
-                        const book = booksData[bookId];
-                        const systemPrompt = `You are a highly knowledgeable literary assistant specializing in the book "${book.volumeInfo.title}" by ${book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'unknown author'}. Your task is to answer user questions with deep, detailed, and analytical insights about the book's plot, characters, themes, and literary style. Use Google Search to find detailed information and then synthesize it into your response. The conversation should be in ${currentLang === 'ar' ? 'Arabic' : 'English'}.`;
-                        const ttsResponse = await fetchGeminiContent(null, { "google_search": {} }, { parts: [{ text: systemPrompt }] }, chatHistories[bookId], true);
-                        const botResponseText = ttsResponse.text || strings[currentLang].chatError;
-                        const audioData = ttsResponse.audio; const mimeType = ttsResponse.mimeType;
-                        if (audioData && mimeType && mimeType.includes('audio/L16')) {
-                            const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                            const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
-                            const pcmData = base64ToArrayBuffer(audioData);
-                            const pcm16 = new Int16Array(pcmData);
-                            const wavBlob = pcmToWav(pcm16, sampleRate);
-                            playAudio(wavBlob);
-                        }
-                        chatHistories[bookId].push({ role: 'model', parts: [{ text: botResponseText }] });
-                        loadingIndicator.remove(); addMessageToChat(bookId, botResponseText, 'bot');
-                    } catch (error) {
-                        loadingIndicator.remove(); addMessageToChat(bookId, strings[currentLang].chatError, 'bot');
-                    }
-                }
-                if (chatSendBtn) chatSendBtn.addEventListener('click', () => sendMessage(bookId, chatInput));
-                if (chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(bookId, chatInput); });
-            }
-
-            async function generateBookQuotes(bookData, container, cacheKey) {
-                container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].quotesTitle}</h3><div class=\"space-y-6\"><div class=\"flex items-center justify-center text-indigo-600 font-semibold space-x-2 space-x-reverse\"><svg class=\"animate-spin h-6 w-6\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v8H4z\"></path></svg><span class=\"loading-text\">${strings[currentLang].quotesLoading}</span></div></div>`;
-                const title = bookData.volumeInfo.title || '';
-                const authors = bookData.volumeInfo.authors ? bookData.volumeInfo.authors.join(', ') : '';
-                const prompt = `Find 3 to 5 most profound or memorable quotes and excerpts from the book "${title}" by ${authors}. Each quote should be separated by a new line, and the response must be in ${currentLang === 'ar' ? 'Arabic' : 'English'}.`;
-                const systemPrompt = `Act as a librarian and literary researcher. Your goal is to find accurate and impactful quotes from the specified book. Use Google Search to locate the quotes and present them clearly.`;
-                try {
-                    const quotesText = await fetchGeminiContent(prompt, { "google_search": {} }, { parts: [{ text: systemPrompt }] });
-                    const formattedQuotes = quotesText.split('\n').map(q => q.trim()).filter(q => q.length > 5).map(q => `<blockquote class=\"p-3 my-2 border-r-4 border-indigo-500 bg-indigo-50 italic text-gray-700\">“${q}”</blockquote>`).join('');
-                    const outputHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].quotesTitle}</h3><div class=\"mt-4 p-4 bg-white rounded-lg text-sm text-gray-700 whitespace-pre-wrap\">${formattedQuotes}</div>`;
-                    container.innerHTML = outputHTML; analysisCache[cacheKey] = outputHTML;
-                } catch (error) {
-                    container.innerHTML = `<h3 class=\"text-xl font-bold text-center text-gray-800 mb-4\">${strings[currentLang].quotesTitle}</h3><p class=\"text-red-500 text-center\">${strings[currentLang].quotesError}</p>`;
-                }
-            }
-
-            async function fetchGeminiContent(prompt, tools = null, systemInstruction = null, chatHistory = null, tts = false) {
-                const contents = chatHistory || [{ parts: [{ text: prompt }] }];
-                let apiUrl = geminiApiUrl;
-                const payload = { contents };
-                if (tts) {
-                    apiUrl = geminiTtsApiUrl;
-                    payload.generationConfig = { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: currentLang === 'ar' ? "Kore" : "Zephyr" } } } };
-                }
-                if (tools) payload.tools = tools;
-                if (systemInstruction) payload.systemInstruction = systemInstruction;
-                const apiKeyToUse = geminiApiKey || "";
-                const url = apiKeyToUse ? `${apiUrl}?key=${apiKeyToUse}` : apiUrl;
-                let response; let lastError = null;
-                for (let i = 0; i < 3; i++) {
-                    try {
-                        response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                        if (response.status === 429) { await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000)); continue; }
-                        if (!response.ok) { const errorText = await response.text(); throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`); }
-                        const result = await response.json();
-                        const candidate = result?.candidates?.[0];
-                        if (tts && candidate && candidate.content?.parts?.[0]?.inlineData) {
-                            const audioData = candidate.content.parts[0].inlineData.data;
-                            const mimeType = candidate.content.parts[0].inlineData.mimeType;
-                            const textPartIndex = candidate.content.parts.findIndex(p => p.text && !p.inlineData);
-                            const text = textPartIndex !== -1 ? candidate.content.parts[textPartIndex].text : '';
-                            return { text, audio: audioData, mimeType };
-                        }
-                        const content = candidate?.content?.parts?.[0]?.text;
-                        if (content) return content; else throw new Error('No content received from API.');
-                    } catch (error) {
-                        lastError = error; await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-                    }
-                }
-                throw lastError || new Error('Failed to connect to API after multiple retries.');
-            }
-
-            function createBookCard(book) {
-                const volumeInfo = book.volumeInfo; if (!volumeInfo) return null;
-                const title = volumeInfo.title || 'غير متوفر';
-                const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'غير متوفر';
-                const averageRating = volumeInfo.averageRating || 0;
-                const ratingsCount = volumeInfo.ratingsCount || 0;
-                const thumbnail = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : 'https://placehold.co/128x192/E5E7EB/A1A1AA?text=No+Image';
-                const generateStarRating = (rating) => { const full = Math.floor(rating); const half = rating - full >= 0.5; const empty = 5 - full - (half ? 1 : 0); let s=''; for(let i=0;i<full;i++) s+='★'; if (half) s+='½'; for(let i=0;i<empty;i++) s+='☆'; return `<span class=\"text-yellow-400\">${s}</span>`; };
-                const card = document.createElement('div'); card.className = 'book-card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300'; card.dataset.id = book.id;
-                const isCompared = comparisonBooks.includes(book.id);
-                const compareBtnClass = isCompared ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-500 hover:bg-gray-600';
-                const compareBtnText = isCompared ? '✅' : strings[currentLang].addToCompare;
-                const buttonsHtml = `
-                    <button class="book-stats-btn px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors duration-300" data-book-id='${book.id}'>${strings[currentLang].bookStatsButton}</button>
-                    <button class="similar-book-btn px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300" data-book-id='${book.id}'>${strings[currentLang].similarBooksButton}</button>
-                    <button class="compare-add-btn px-4 py-2 ${compareBtnClass} text-white rounded-lg transition-colors duration-300" data-book-id='${book.id}'>${compareBtnText}</button>
-                    ${(book.accessInfo && book.accessInfo.webReaderLink) ? `<a href="${book.accessInfo.webReaderLink}" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">${strings[currentLang].downloadButton}</a>` : ''}
-                `;
-                card.innerHTML = `
-                    <img src="${thumbnail}" alt="${title}" class="rounded-lg shadow-sm mb-4 sm:mb-0 sm:ml-6 w-48">
-                    <div class="flex-1 space-y-2 text-center ${currentLang === 'ar' ? 'sm:text-right' : 'sm:text-left'}">
-                        <h2 class="text-xl font-bold text-gray-900">${title}</h2>
-                        <p class="text-sm text-gray-600"><strong>${strings[currentLang].authorsLabel}</strong> ${authors}</p>
-                        <div class="flex items-center justify-center ${currentLang === 'ar' ? 'sm:justify-start' : 'sm:justify-end'} gap-2 mt-2">
-                            <p class="text-sm text-gray-600 flex items-center gap-2"><strong>${strings[currentLang].ratingLabel}</strong> ${generateStarRating(averageRating)} (${ratingsCount})</p>
-                        </div>
-                        <div class="flex flex-col sm:flex-row ${currentLang === 'ar' ? 'justify-center sm:justify-end' : 'justify-center sm:justify-start'} items-center gap-2 mt-4 flex-wrap">${buttonsHtml}</div>
-                        <div id="analysisContainer-${book.id}" class="space-y-4 mt-4"></div>
-                    </div>`;
-                return card;
-            }
-
-            async function fetchBooks(query, genre) {
-                if (loadingIndicator) loadingIndicator.classList.remove('hidden');
-                if (resultsContainer) resultsContainer.innerHTML = '';
-                if (errorDisplay) errorDisplay.classList.add('hidden');
-                if (similarBooksSection) similarBooksSection.classList.add('hidden');
-                try {
-                    let fullQuery = `q=${encodeURIComponent(query || 'programming')}`;
-                    if (genre !== 'all') fullQuery += `+subject:${encodeURIComponent(genre)}`;
-                    if (googleBooksApiKey) fullQuery += `&key=${googleBooksApiKey}`;
-                    const response = await fetch(`https://www.googleapis.com/books/v1/volumes?${fullQuery}&maxResults=10`);
-                    if (!response.ok) throw new Error(strings[currentLang].errorFetch);
-                    const data = await response.json();
-                    if (data.items && data.items.length > 0) displayResults(data.items); else displayError(strings[currentLang].errorNoBooks);
-                } catch (error) {
-                    displayError(strings[currentLang].errorFetch);
-                } finally {
-                    if (loadingIndicator) loadingIndicator.classList.add('hidden');
-                }
-            }
-
-            function displayResults(books) {
-                const fragment = document.createDocumentFragment();
-                booksData = {}; comparisonBooks = [];
-                books.forEach(book => { booksData[book.id] = book; const card = createBookCard(book); if (card) fragment.appendChild(card); });
-                if (resultsContainer) { resultsContainer.innerHTML = ''; resultsContainer.appendChild(fragment); }
-                if (compareButtonContainer) compareButtonContainer.classList.add('hidden');
-            }
-
-            async function fetchSimilarBooks(bookData) {
-                if (similarBooksSection) similarBooksSection.classList.remove('hidden');
-                if (similarBooksLoading) similarBooksLoading.classList.remove('hidden');
-                if (similarBooksContainer) similarBooksContainer.innerHTML = '';
-                if (similarBooksError) similarBooksError.classList.add('hidden');
-                const title = bookData.volumeInfo.title || '';
-                const authors = bookData.volumeInfo.authors ? bookData.volumeInfo.authors.join(' ') : '';
-                let query = `inauthor:${authors} ${title}`.trim();
-                if (googleBooksApiKey) query += `&key=${googleBooksApiKey}`;
-                try {
-                    const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`);
-                    if (!response.ok) throw new Error(strings[currentLang].similarBooksError);
-                    const data = await response.json();
-                    if (data.items && data.items.length > 0) {
-                        const filtered = data.items.filter(item => item.id !== bookData.id);
-                        if (filtered.length > 0) {
-                            const fragment = document.createDocumentFragment();
-                            filtered.forEach(book => { booksData[book.id] = book; const card = createBookCard(book); if (card) fragment.appendChild(card); });
-                            if (similarBooksContainer) { similarBooksContainer.innerHTML = ''; similarBooksContainer.appendChild(fragment); }
-                        } else {
-                            if (similarBooksError) { similarBooksError.textContent = strings[currentLang].similarBooksError; similarBooksError.classList.remove('hidden'); }
-                        }
-                    } else {
-                        if (similarBooksError) { similarBooksError.textContent = strings[currentLang].similarBooksError; similarBooksError.classList.remove('hidden'); }
-                    }
-                } catch (error) {
-                    if (similarBooksError) { similarBooksError.textContent = strings[currentLang].similarBooksError; similarBooksError.classList.remove('hidden'); }
-                } finally {
-                    if (similarBooksLoading) similarBooksLoading.classList.add('hidden');
-                }
-            }
-
-            function displayError(message) {
-                if (errorDisplay) { errorDisplay.textContent = message; errorDisplay.classList.remove('hidden'); }
-                if (resultsContainer) resultsContainer.innerHTML = '';
-                if (similarBooksSection) similarBooksSection.classList.add('hidden');
-            }
-
-            function displayBookStatsModal(bookData) {
-                const volumeInfo = bookData.volumeInfo; if (!volumeInfo) return;
-                const s = strings[currentLang];
-                bookStatsModal.dataset.currentBookId = bookData.id;
-                const disabledAttr = geminiFeaturesEnabled ? '' : 'disabled title="AI features require Gemini API key" class="opacity-50 cursor-not-allowed tab-button px-4 py-2 rounded-tl-lg rounded-tr-lg"';
-                const enabledClass = 'tab-button px-4 py-2 rounded-tl-lg rounded-tr-lg';
-                const tabButtonsHtml = `
-                    <button id="tab-stats" class="tab-button active px-4 py-2 rounded-tl-lg rounded-tr-lg">${s.tabStats}</button>
-                    <button id="tab-reading-plan" ${geminiFeaturesEnabled ? `class=\"${enabledClass}\"` : disabledAttr} data-target="reading-plan-content">${s.tabReadingPlan}</button>
-                    <button id="tab-review" ${geminiFeaturesEnabled ? `class=\"${enabledClass}\"` : disabledAttr} data-target="review-content">${s.tabReview}</button>
-                    <button id="tab-chat" ${geminiFeaturesEnabled ? `class=\"${enabledClass}\"` : disabledAttr} data-target="chat-content">${s.tabChat}</button>
-                    <button id="tab-quotes" ${geminiFeaturesEnabled ? `class=\"${enabledClass}\"` : disabledAttr} data-target="quotes-content">${s.tabQuotes}</button>`;
-                modalAnalysisButtons.innerHTML = tabButtonsHtml;
-                modalAnalysisOutput.innerHTML = `<p id="analysisInstructions" class="text-center text-gray-500">${currentLang === 'ar' ? 'اختر إحدى خدمات التحليل أعلاه.' : 'Choose an analysis service above.'}</p>`;
-                const panes = ['reading-plan-content','review-content','chat-content','quotes-content'];
-                panes.forEach(paneId => { let pane = document.getElementById(paneId); if (!pane) { pane = document.createElement('div'); pane.id = paneId; pane.className = 'tab-content-pane hidden'; modalAnalysisOutput.appendChild(pane); } else { pane.classList.add('hidden'); } });
-
-                const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                const publisher = volumeInfo.publisher || (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                const publishedDate = volumeInfo.publishedDate || (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                const pageCount = volumeInfo.pageCount || (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                const ratingsCount = volumeInfo.ratingsCount || 0;
-                const isbn13 = volumeInfo.industryIdentifiers ? volumeInfo.industryIdentifiers.find(id => id.type === 'ISBN_13')?.identifier : (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                const categories = volumeInfo.categories || [];
-                const categoriesText = categories.map(cat => { const main = cat.split('/')[0].trim(); const key = main.toLowerCase().replace(/[^a-z0-9]/g,''); return strings[currentLang].genres[key] || main; }).join(', ') || (currentLang === 'ar' ? 'غير متوفر' : 'N/A');
-                bookDetailsSummary.innerHTML = `
-                    <div><strong>${s.authorsLabel}</strong> ${authors}</div>
-                    <div><strong>${s.publishedDateLabel}</strong> ${publishedDate}</div>
-                    <div><strong>${s.publisherLabel}</strong> ${publisher}</div>
-                    <div><strong>${s.pageCountLabel}</strong> ${pageCount}</div>
-                    <div><strong>${s.categoryLabel}</strong> ${categoriesText}</div>
-                    <div><strong>${s.isbnLabel}</strong> ${isbn13}</div>`;
-
-                const avgRatingStarsEl = document.getElementById('avgRatingStars');
-                const avgRatingValueEl = document.getElementById('avgRatingValue');
-                const totalRatingsCountEl = document.getElementById('totalRatingsCount');
-                const ratingDistributionEl = document.getElementById('ratingDistribution');
-                const rating = volumeInfo.averageRating || 0;
-                const generateStarRatingDetailed = (r) => { let stars=''; for (let i=1;i<=5;i++){ if (r>=i) stars+='★'; else if (r>i-1 && r<i) stars+='½'; else stars+='☆'; } return stars; };
-                if (avgRatingStarsEl) avgRatingStarsEl.textContent = generateStarRatingDetailed(rating);
-                if (avgRatingValueEl) avgRatingValueEl.textContent = `${rating.toFixed(2)} / 5`;
-                const ratingsCountText = currentLang === 'ar' ? `من ${ratingsCount} تقييم` : `from ${ratingsCount} ratings`;
-                if (totalRatingsCountEl) totalRatingsCountEl.textContent = ratingsCountText;
-                ratingDistributionEl.innerHTML = '';
-                if (ratingsCount > 0) {
-                    const mockDistribution = [
-                        { label: '5 stars', percent: 45 }, { label: '4 stars', percent: 33 }, { label: '3 stars', percent: 15 }, { label: '2 stars', percent: 3 }, { label: '1 star', percent: 4 }
-                    ].reverse();
-                    mockDistribution.forEach(item => {
-                        let labelText = item.label; if (currentLang === 'ar') labelText = labelText.replace('stars','نجوم').replace('star','نجمة');
-                        const barItem = document.createElement('div');
-                        barItem.className = 'flex items-center text-sm mb-1';
-                        barItem.innerHTML = `
-                            <span class="w-16 text-gray-600 ${currentLang === 'ar' ? 'text-right' : 'text-left'}">${labelText}</span>
-                            <div class="flex-1 bg-gray-200 rounded-full h-2 mx-2"><div class="bg-indigo-600 h-2 rounded-full" style="width: ${item.percent}%;"></div></div>
-                            <span class="w-10 text-gray-600 ${currentLang === 'ar' ? 'text-left' : 'text-right'}">${item.percent}%</span>`;
-                        ratingDistributionEl.appendChild(barItem);
-                    });
-                } else {
-                    ratingDistributionEl.innerHTML = `<p class="text-gray-500 text-center">${strings[currentLang].ratingsCountLabel} (0)</p>`;
-                }
-
-                const genresTagsContainerEl = document.getElementById('genresTagsContainer');
-                genresTagsContainerEl.innerHTML = '';
-                if (categories.length > 0) {
-                    categories.forEach(cat => { const main = cat.split('/')[0].trim(); const key = main.toLowerCase().replace(/[^a-z0-9]/g,''); const translated = strings[currentLang].genres[key] || main; const tag = document.createElement('span'); tag.className = 'genre-tag'; tag.textContent = translated; genresTagsContainerEl.appendChild(tag); });
-                } else {
-                    genresTagsContainerEl.innerHTML = `<span class="text-gray-500">${strings[currentLang].categoryLabel} ${currentLang === 'ar' ? 'غير متوفر' : 'N/A'}</span>`;
-                }
-
-                const ctx = document.getElementById('pageCountChartModal').getContext('2d');
-                if (pageCountChartModalInstance) pageCountChartModalInstance.destroy();
-                const pageCountValue = volumeInfo.pageCount || 0;
-                const pageCountLabel = strings[currentLang].pageCountLabel;
-                const centerTextPlugin = { id: 'centerText', beforeDraw: (chart) => { const { width, height, ctx } = chart; ctx.restore(); const fontSize = (height / 120).toFixed(2); ctx.font = `${fontSize}em ${currentLang === 'ar' ? 'Cairo' : 'Inter'}, sans-serif`; ctx.textBaseline = 'middle'; const text = pageCountValue.toString(); const textX = Math.round((width - ctx.measureText(text).width) / 2); const textY = height / 2; ctx.fillStyle = '#1f2937'; ctx.fillText(text, textX, textY); ctx.save(); } };
-                pageCountChartModalInstance = new Chart(ctx, { type: 'doughnut', data: { labels: [pageCountLabel], datasets: [{ data: [pageCountValue, Math.max(0, 500 - pageCountValue)], backgroundColor: ['#10b981', '#e5e7eb'], hoverOffset: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { title: () => pageCountLabel, label: (context) => context.dataIndex === 0 ? `${pageCountValue}` : '' } } } }, plugins: [centerTextPlugin] });
-
-                bookStatsModal.classList.remove('hidden');
-                activateTab('tab-stats', bookData.id);
-            }
-        };
-    </script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
